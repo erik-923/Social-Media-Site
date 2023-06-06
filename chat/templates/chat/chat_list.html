@@ -1,0 +1,76 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load humanize %} {% load custom_filters %}
+
+{% block content %}
+
+<header class="fixed-top py-3" id="custom-chat-header" style="z-index: 1;">
+    <div class="row">
+        <div class="col-10 offset-2">
+            <div class="row">
+                <div class="col-9 mx-auto">
+                    <div class="row">
+                        <div class="col text-center">
+                            <h1>Chats</h1> 
+                        </div>
+                        <div class="col-3">
+                            <a href="{% url 'create-chat' %}" class="custom-btn mr-5">
+                                <i class="bi bi-pencil-square" style="font-size: 24px;"></i>
+                            </a>         
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="row">
+        <div class="col-9 mx-auto">
+            <div id="all-chats" class="vh-100">
+                {% for chat in chats %}
+                {% if chat.participants.count == 2 %}
+                    {% for participant in chat.participants.all %}
+                        {% if participant != request.user %}
+                        <a href="{% url 'chat-view' chat.id %}" class="text-dec-none">
+                            <div class="chat-container">
+                                <div class="row">
+                                    <div class="col-auto my-2">
+                                            <img src="{{participant.profile.profile_pic.url}}" class="rounded-circle img-fluid" alt="" height="70" width="70">
+                                    
+                                    </div>
+                                    <div class="col-auto my-2 pl-0">
+                                        <div>
+                                            <h5>{{ participant.first_name }} {% if chat.get_most_recent_message %} • {{ chat.get_most_recent_message.timestamp|timesince|upto:',' }} ago {% endif %}</h5>
+                                            <small>{% if chat.get_most_recent_message %}{{ chat.get_most_recent_message.message|slice:":35" }}{% if chat.get_most_recent_message.message|length > 35 %}...{% endif %}{% else %}No messages yet{% endif %}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                <a href="{% url 'chat-view' chat.id %}" class="text-dec-none">
+                <div class="chat-container">
+                    <div class="row">
+                        <div class="col-auto my-2">
+                                <img src="/media/groupchat.png" class="rounded-circle img-fluid" alt="" height="70" width="70">
+                        </div>
+                        <div class="col-auto my-2 pl-0">
+                        <div>
+                            <h5>{{ chat.participants.count }} participants {% if chat.get_most_recent_message %} • {{ chat.get_most_recent_message.timestamp|timesince|upto:',' }} ago {% endif %}</h5>
+                            <small>{% if chat.get_most_recent_message %}{{ chat.get_most_recent_message.message|slice:":35" }}{% if chat.get_most_recent_message.message|length > 35 %}...{% endif %}{% else %}No messages yet{% endif %}</small>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

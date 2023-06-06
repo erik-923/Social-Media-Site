@@ -1,0 +1,96 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load humanize %} {% load custom_filters %}
+{% block content %}
+<div class="container">
+    <div class="row pt-5">
+        <div class="col-6 vh-100 notification-column">
+            <h2 class="text-center py-3 notification-header">Friend Requests</h2>
+            {% for request in requests %}
+            <div class="conatiner my-2">
+                <div class="row search-user">
+                    <div class="col-auto pr-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <a href="{{ request.from_user.profile.get_absolute_url }}">
+                                <img src="{{ request.from_user.profile.profile_pic.url }}" class="rounded-circle img-fluid " alt="" height="50" width="50">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 py-2">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                {{ request.from_user }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <div class="d-flex align-items-start py-2">
+                            <div class="flex-grow-1">
+                                <a href="{% url 'accept_friend_request' request.from_user.id %}" class="custom-btn">Accept</a>
+                                <a href="{% url 'delete_friend_request' request.from_user.id %}" class="custom-btn">Decline</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto py-2">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                {{ request.timestamp|timesince|upto:',' }} ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h6 class="text-center py-5">No Incoming Friend Requests</h6>
+            <div class="text-center"><a class="custom-btn" href="{% url 'friend-recomendations' %}">Find Friends</a></div>
+            
+            {% endfor %}
+        </div>
+        <div class="col-6 vh-100 notification-column">
+            <h2 class="text-center py-3 notification-header">Comments</h2>
+            {% for comment in comments %}
+            <div class="conatiner my-2">
+                <div class="row search-user">
+                    <div class="col-auto pr-0">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                <a href="{% url 'post-details' comment.post.id %}">
+                                <img src="{{ comment.post.picture.url }}" class="rounded img-fluid " alt="" height="50" width="50">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 py-2">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                {{ comment.author }}:
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="d-flex align-items-start py-0">
+                            <div class="flex-grow-1">
+                                {{ comment.text }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-auto py-2">
+                        <div class="d-flex align-items-start">
+                            <div class="flex-grow-1">
+                                {{ comment.created_at|timesince|upto:',' }} ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <h6 class="text-center py-5">No Comments</h6>
+            <div class="text-center"><a class="custom-btn" href="{% url 'create-post' %}">Create a Post</a></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

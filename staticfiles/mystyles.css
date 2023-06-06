@@ -1,0 +1,95 @@
+
+
+.custom-card {
+    border-color: #82BAC3;
+    background-color: #F5F5F5;
+    color: black;
+}
+
+.custom-submit {
+    background-color: #82BAC3;
+    color: #333333;
+}
+
+.custom-submit:hover {
+    color: #FFFFFF;
+    background-color: #333333;
+}
+
+a {
+    color: #82BAC3;
+}
+
+a:hover {
+    color: #333333;
+}
+
+body {
+    background-color: black; 
+    color: white;
+}
+
+.custom-nav {
+    background-color: black;
+    border-right: 1px solid #333333;
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: black;
+    border-radius: 5px;
+    text-decoration: none;
+    color: white;
+    font-size: 18px;
+}
+
+.nav-btn:hover {
+    color: white;
+    background-color: #333333;
+}
+
+.nav-logo {
+    margin-left: 5px;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.profile-header {
+    margin-top: 20px;
+    padding-top: 20px;
+    margin-right: 60px;
+    margin-left: 30px;
+}
+
+
+.custom-btn {
+    display: inline-block;
+    padding: 5px 10px;
+    background-color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 16px;
+    margin-left: 15px;
+}
+
+.custom-btn:hover {
+    background-color: #82BAC3;
+    color: #333333;
+    text-decoration: none;
+}
+
+.custom-btn2 {
+    margin-left: 40px;
+}
+
+.profile-body {
+    border-top: 1px solid #333333;
+    margin-top: 40px;
+}
+
+.search-results {
+    background-color: #333333;
+    border: 10px solid red;
+}

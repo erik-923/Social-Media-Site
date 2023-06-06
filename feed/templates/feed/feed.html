@@ -1,0 +1,94 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load humanize %} {% load custom_filters %}
+{% block content %}
+
+<h1 class="text-center py-5">My Feed</h1>
+
+<div class="container">
+
+    <div class="d-flex justify-content-center align-items-center flex-column">
+    {% for post in posts %}
+    <div class="post-bounds">
+        <div class="row">
+            <div class="col-auto my-2">
+                <a href="{{ post.author.profile.get_absolute_url }}">
+                    <img src="{{post.author.profile.profile_pic.url}}" class="rounded-circle img-fluid" alt="" height="50" width="50">
+                </a>
+              
+            </div>
+            <div class="col-auto my-2 pl-0">
+              <div>
+                {{ post.author.username }} • {{ post.created_at|timesince|upto:',' }} ago
+              </div>
+            </div>
+        </div>
+    
+        <div class="post">
+            <img src="{{ post.picture.url }}" alt="Post Image" height="400" width="400">
+            <div class="row mt-2">
+                <div class="col-auto">
+                    <button class="like-btn {% if request.user in post.likes.all %} liked{% endif %}" data-post-id="{{ post.id }}">
+                        <i class="bi bi-fire like-icon"></i>
+                    </button>
+                </div>
+                <div class="col-auto">
+                    <a href="{% url 'create-comment' post.id %}" class="bi bi-chat like-icon"></a>
+                </div>
+                <div class="col text-right">
+                    <a href="{% url 'post-details' post.id %}" class="bi bi-three-dots-vertical like-icon"></a>
+                </div>
+            </div>
+
+
+
+            <p class="mb-3">{{ post.caption }}</p>
+
+            
+            <a href="{% url 'post-details' post.id %}" class="user-link mr-3"><span class="like-count">{{ post.like_count }}</span> {% if post.like_count == 1 %}like{% else %}likes{% endif %}</a>
+            <a href="{% url 'post-details' post.id %}" class="user-link">{{ post.comments.all.count }} {% if post.comments.all.count == 1 %}comment{% else %}comments{% endif %}</a>
+
+
+            
+        </div>
+    </div>
+    {% empty %}
+      <p>No posts available.</p>
+    {% endfor %}
+</div>
+</div>
+
+
+
+{% endblock content %}
+
+{% block jsfiles %} 
+<script>
+    $.ajaxSetup({
+    headers: {
+      'X-CSRFToken': '{{ csrf_token }}'
+    }
+  });
+  
+  $(document).ready(function() {
+  $('.like-btn').click(function() {
+    var button = $(this); // Store reference to the button element
+    var postID = button.data('post-id');
+    var likeCount = button.closest('.post').find('.like-count');
+
+
+    $.ajax({
+      url: '/like/' + postID + '/',
+      type: 'POST',
+      dataType: 'json',
+      cache: false, // Disable caching
+      success: function(data) {
+        console.log(data.like_count);
+        console.log(likeCount);
+        likeCount.text(data.like_count);
+        button.toggleClass('liked', data.is_liked); 
+        // Toggle the liked class based on the is_liked value
+      }
+    });
+  });
+});
+</script>
+{% endblock jsfiles %}

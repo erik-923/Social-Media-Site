@@ -1,0 +1,111 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load custom_filters %}
+{% block content %}
+
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <div class="post-bounds my-5">
+            <div class="row">
+                <div class="col-auto my-2">
+                    <a href="{{ post.author.profile.get_absolute_url }}">
+                        <img src="{{post.author.profile.profile_pic.url}}" class="rounded-circle img-fluid" alt="" height="50" width="50">
+                    </a>
+                
+                </div>
+                <div class="col-auto my-2 pl-0">
+                    <div>
+                        {{ post.author.username }} • {{ post.created_at|timesince|upto:',' }} ago
+                    </div>
+                </div>
+                <div class="col-text-right my-2">
+                    {% if post.author == request.user %}
+                    <a href="{% url 'delete-post' post.id %}"><button>Delete Post</button></a>
+                    {% endif %}
+                </div>
+            </div>
+        
+            <div class="post">
+                <img src="{{ post.picture.url }}" alt="Post Image" height="400" width="400">
+                <p class="my-3">{{ post.caption }}</p>
+            </div>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="d-flex justify-content-center align-items-center flex-column">
+                    <h2>{{post.comments.all.count }} {% if post.comments.all.count == 1%}Comment{% else %}Comments{% endif %}</h2>
+                    {% for comment in post.comments.all %}
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-auto px-0">
+                            <div class="d-flex align-items-start">
+                              <div class="flex-grow-1">
+                                <img src="{{ comment.author.profile.profile_pic.url }}" class="rounded-circle img-fluid " alt="" height="50" width="50">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-auto pl-3">
+                            <div class="d-flex align-items-start">
+                              <div class="flex-grow-1">
+                                {{ comment.author }}:
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-lg-6">
+                            <div class="d-flex align-items-start">
+                              <div class="flex-grow-1">
+                                {{ comment.text }}
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                {% if comment.author == request.user or request.user == post.author %}
+                                <a href="{% url 'delete-comment' comment.id %}" class="custom-icon"><i class="bi bi-x-circle"></i></a>
+                                {% endif %}                              
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    {% empty %}
+                    <p>No comments yet.</p>
+                    {% endfor %}
+                    <a href="comment/create/" class="my-3"><button>Add Comment</button></a>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="d-flex justify-content-center align-items-center flex-column pb-5">
+                    <h2>{{post.like_count }} {% if post.like_count == 1%}Like{% else %}Likes{% endif %}</h2>
+                    {% for user in post.likes.all %}
+                    <div class="row">
+                        <div class="col-auto my-2">
+                            <a href="{{ user.profile.get_absolute_url }}">
+                                <img src="{{ user.profile.profile_pic.url }}" class="rounded-circle img-fluid" alt="" height="50" width="50">
+                            </a>
+                        
+                        </div>
+                        <div class="col-auto my-2 pl-0">
+                            <div>
+                                <h5 class="pl-0 mb-0">{{ user.username }}</h5>
+                                <small class="pl-0 mt-o">{{ user.first_name }} {{ user.last_name }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p>No likes yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+
+
+</div>
+
+{% endblock content %}
+

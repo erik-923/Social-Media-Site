@@ -1,0 +1,60 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+
+
+<div class="container">
+    <div class="d-flex justify-content-center align-items-center flex-column">
+        <h1 class="mb-5">Create Post</h1>
+        <form method="POST" enctype="multipart/form-data" id="create-post-form">
+            <div id="image-preview"></div>
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button type="submit">Create</button>
+          </form>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block jsfiles %}
+<script>
+    function previewAndResizeImage(event) {
+      var fileInput = event.target;
+      var file = fileInput.files[0];
+      var reader = new FileReader();
+  
+      reader.onload = function(e) {
+        var img = new Image();
+        img.onload = function() {
+          var canvas = document.createElement('canvas');
+          var size = Math.min(img.width, img.height);
+          var width = size;
+          var height = size;
+  
+          if (size > 400) {
+            width = 400;
+            height = 400;
+          }
+  
+          canvas.width = width;
+          canvas.height = height;
+  
+          var ctx = canvas.getContext('2d');
+          ctx.drawImage(img, (img.width - size) / 2, (img.height - size) / 2, size, size, 0, 0, width, height);
+  
+          var preview = document.getElementById("image-preview");
+          preview.innerHTML = '';
+          preview.appendChild(canvas);
+        };
+  
+        img.src = e.target.result;
+      };
+  
+      reader.readAsDataURL(file);
+    }
+  
+    var fileInput = document.getElementById("id_image");  // Replace "id_image" with the actual field ID
+    fileInput.addEventListener("change", previewAndResizeImage);
+  </script>
+{% endblock jsfiles %}

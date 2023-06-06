@@ -1,0 +1,50 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 vh-100 search-body">
+        <form class="form-inline" style="margin-top: 30px;" action="{% url 'search_users' %}" method="get">
+          <div class="input-group">
+            <input name="q" type="text" class="form-control search-bar" placeholder="Search users...">
+            <div class="input-group-append">
+              <button class="btn btn-primary" type="submit">
+                <i class="bi bi-search"></i>
+              </button>
+            </div>
+          </div>
+        </form>
+        
+        <div class="card card-signin my-5 search-results">
+          <div class="card-body">
+            {% for user in users %}
+            <div class="search-user">
+                <a class="user-link" href="{{ user.profile.get_absolute_url }}">
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-1">
+                            <img src="{{ user.profile.profile_pic.url }}" class="rounded mr-2" width="50" height="50" alt="">
+                          </div>
+                          <div class="col">
+                            <div style="color: white;">
+                                <b>{{ user.username }}</b><br>
+                                {{ user.first_name }} {{user.last_name }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
+

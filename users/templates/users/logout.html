@@ -1,0 +1,23 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+
+<br />
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-9 col-lg-7 mx-auto">
+      <div class="card my-5 custom-card center">
+        <div class="card-body">
+          <h5 class="card-title text-center"><b>Successfully Logged Out!</b></h5>
+          <br>
+          <small
+          ><p class="text-center">
+            Sign in to view content!
+            <a href="{% url 'login' %}"><b>Login Now!</b></a>
+          </p></small
+        >    
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

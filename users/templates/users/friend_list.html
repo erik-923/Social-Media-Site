@@ -1,0 +1,38 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %}
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-6 vh-100 search-body"> 
+        <br>
+        <h5 class="card-title text-center"><b>Friends</b></h5>       
+<div class=" col card card-signin my-5 search-results">
+
+    <div class="card-body">
+        {% for user in friends %}
+            <div class="search-user">
+                <a class="user-link" href="{{ user.get_absolute_url }}">
+                    <div class="container">
+                        <div class="row">
+                          <div class="col-2">
+                            <img src="{{ user.profile_pic.url }}" class="rounded mr-2" width="50" height="50" alt="">
+                          </div>
+                          <div class="col">
+                            <div style="color: white;">
+                                <b>{{ user.user.username }}</b><br>
+                                {{ user.user.first_name }} {{ user.user.last_name }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+    </div>
+
+{% endblock content %}

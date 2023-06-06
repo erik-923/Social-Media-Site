@@ -1,0 +1,35 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load humanize %} {% load custom_filters %}
+
+{% block content %}
+<header class="fixed-top py-3" id="custom-chat-header" style="z-index: 1;">
+    <div class="row">
+        <div class="col-10 offset-2">
+            <div class="row">
+                <div class="col-9 mx-auto">
+                    <div class="row">
+                        <div class="col text-center">
+                            <h1>Create New Chat</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>            
+</header>
+<div class="container">
+    <div class="row">
+        <div class="col-9 mx-auto">
+            <div id="all-chats" class="vh-100">
+                <form method="POST" class="text-center">
+                    {% csrf_token %}
+                    {{ form|crispy }}
+                
+                    <button class="btn btn-primary" type="submit">Create Chat</button>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

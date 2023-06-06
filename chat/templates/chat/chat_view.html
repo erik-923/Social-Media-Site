@@ -1,0 +1,85 @@
+{% extends "feed/layout.html" %} {% load crispy_forms_tags %} {% load static %} {% load humanize %} {% load custom_filters %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-9 mx-auto text-center">
+            <header class="fixed-top py-3" id="custom-chat-header" style="z-index: 1;">
+                <div class="row">
+                    <div class="col-10 offset-2">
+                        <div class="row">
+                            <div class="col-9 mx-auto">
+                                <div class="row">
+                                    <div class="col text-center">
+                                        {% for participant in participants %}
+                                        <a href="{{ participant.profile.get_absolute_url }}">
+                                            <img src="{{participant.profile.profile_pic.url}}" class="rounded-circle img-fluid" alt="" height="50" width="50">
+                                        </a>
+                                        {% endfor %}
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="py-2">
+                                            <a href="{% url 'leave-chat' chat.id%}" class="custom-btn mr-5">
+                                                Leave Chat
+                                            </a>  
+                                        </div>       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            </header>
+            
+                <div id="message-container" class="mb-3">
+                    {% for message in messages %}
+                        {% if message.sender == request.user %}
+                        <div class="text-right message-indicator">
+                            <div class="timestamp pr-4">{{ message.timestamp }}</div>
+                            <div class="sent-message bg-primary p-2 mb-2">
+                                <div style="word-wrap: break-word;">{{ message.message }}</div>
+                            </div>
+                            <a href="{% url 'delete-message' message.id %}" class="timestamp">
+                                <i class="bi bi-x-circle"></i>
+                            </a>
+                        </div>
+                        {% else %}
+                        <div class="text-left message-indicator" > 
+                            {% if chat.participants.count > 2 %}<div id="message-sender" class="pl-2 mt-2">{{ message.sender.first_name }} {{ message.sender.last_name }}</div>{% endif %}
+                            <div class="sent-message p-2 mb-2" style="background-color: #333333;">
+                                <div style="word-wrap: break-word;">{{ message.message }}</div>
+                            </div>
+                            <div class="timestamp">{{ message.timestamp }}</div>
+                        </div>                        
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="pb-4">
+                    <form method="POST" action="{% url 'chat-view' chat.id %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input name="message" type="text" class="form-control" id="chat-bar" placeholder="Type your message here">
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="bi bi-send"></i>
+                                </button>
+                            </div>
+                        </div>                
+                    </form>
+                </div>
+
+            
+            </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block jsfiles %}
+<script>
+function toBottom()
+{
+    window.scrollTo(0, document.body.scrollHeight);
+}
+window.onload=toBottom;
+</script>
+{% endblock jsfiles %}
