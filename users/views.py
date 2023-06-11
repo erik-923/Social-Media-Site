@@ -230,7 +230,7 @@ def friend_recomendations(request):
     for i in sent_to:
          if i.profile in friends:
               friends.remove(i.profile)
-
+    friends = set(friends)
         
     context = {
 		'users': friends,
