@@ -146,7 +146,7 @@ def accept_friend_request(request, id):
 		request_rev = FriendRequest.objects.filter(from_user=request.user, to_user=from_user).first()
 		request_rev.delete()
 	frequest.delete()
-	return HttpResponseRedirect(f'/users/{request.user.profile.slug}')
+	return HttpResponseRedirect(f'/users/{from_user.profile.slug}')
 
 @login_required
 def delete_friend_request(request, id):

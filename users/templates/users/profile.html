@@ -39,6 +39,7 @@
   </div>
   <div class="col-9 mx-auto">
     <div class="row profile-body py-3 mt-2">
+      {% if request.user.profile in u.profile.friends.all or request.user == u %}
       {% for post in posts %} 
         <div class="col-md-4 mx-0 px-0" style="border: 1px solid #333333;">
           <a href="{% url 'post-details' post.id %}">
@@ -48,6 +49,9 @@
       {% empty %}
           <p class="text-center">No posts available.</p>
       {% endfor %}
+      {% else %}
+        <p class="text-center">Add {{ u.username }} as a friend to view their posts.</p>
+      {% endif %}
   </div>
 </div>
 </div>

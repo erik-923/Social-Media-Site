@@ -15,7 +15,7 @@ from users.models import FriendRequest
 def feed(request):
     user = request.user
     friends = user.profile.friends.all()
-    posts = Post.objects.filter(Q(author__profile__in=friends) | Q(author=request.user)).order_by('-created_at')[:20]
+    posts = Post.objects.filter(Q(author__profile__in=friends) | Q(author=request.user)).order_by('-created_at')[:10]
     return render(request, "feed/feed.html", {'posts': posts})
 
 @login_required
@@ -69,7 +69,7 @@ def post_details(request, id):
     post = Post.objects.get(id=id)
     if request.user.profile not in post.author.profile.friends.all() and request.user != post.author:
         return HttpResponseForbidden("You cannot view this post.")
-    comments = post.comments.all()
+    comments = post.comments.all().order_by('-created_at')[::-1]
     return render(request, "feed/post_details.html", {'comments': comments, 'post': post})
 
 @login_required

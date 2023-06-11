@@ -14,7 +14,9 @@ from django.http import JsonResponse, HttpResponseForbidden
 # Create your views here.
 @login_required
 def chat_list(request):
-    chats = request.user.chats.all()
+    chats = request.user.chats.annotate(
+        most_recent_message_timestamp=models.Max('messages__timestamp')
+        ).order_by('-most_recent_message_timestamp')
 
     return render(request, "chat/chat_list.html", {'chats': chats})
 
