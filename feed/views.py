@@ -42,6 +42,8 @@ def delete_post(request, id):
 @login_required
 def create_comment(request, id):
     post = Post.objects.get(id=id)
+    if request.user not in post.author.profile.friends.all() and request.user != post.author:
+        return HttpResponseForbidden("You cannot comment on this post.")
     if request.method == 'POST': 
         form = CommentForm(request.POST)
         if form.is_valid():
@@ -65,6 +67,8 @@ def delete_comment(request, id):
 @login_required
 def post_details(request, id):
     post = Post.objects.get(id=id)
+    if request.user not in post.author.profile.friends.all() and request.user != post.author:
+        return HttpResponseForbidden("You cannot view this post.")
     comments = post.comments.all()
     return render(request, "feed/post_details.html", {'comments': comments, 'post': post})
 
