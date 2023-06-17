@@ -2,7 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, Transpose, Thumbnail
 
 
 # Create your models here.
@@ -16,7 +16,9 @@ class Post(models.Model):
     likes = models.ManyToManyField(User, related_name='liked_posts', blank=True)
     picture = ImageSpecField(
         source='image',
-        processors=[ResizeToFill(width=300, height=300)],
+        processors=[
+        Transpose(),
+        Thumbnail(width=300, height=300, crop=True)],
         format='JPEG',
         options={'quality': 90})
     like_count = models.PositiveIntegerField(default=0, editable=False)

@@ -7,7 +7,7 @@ from django.conf import settings
 from autoslug import AutoSlugField
 from django.db import models
 from imagekit.models import ImageSpecField
-from imagekit.processors import ResizeToFill
+from imagekit.processors import ResizeToFill, Transpose, Thumbnail
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
@@ -15,11 +15,13 @@ class Profile(models.Model):
     slug = AutoSlugField(populate_from='user')
     bio = models.CharField(max_length=255, blank=True)
     friends = models.ManyToManyField("Profile", blank=True)
-    profile_pic = ImageSpecField(
-        source='profile_picture',
-        processors=[ResizeToFill(width=300, height=300)],
-        format='JPEG',
-        options={'quality': 90})
+    profile_pic = ImageSpecField(source='profile_picture',
+                              processors=[
+                                  Transpose(),
+                                  Thumbnail(width=300, height=300, crop=True)
+                              ],
+                              format='JPEG',
+                              options={'quality': 90})
 
 
     def __str__(self):
